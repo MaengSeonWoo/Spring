@@ -10,70 +10,72 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.yedam.app.emp.mapper.EmpMapper;
-import com.yedam.app.emp.service.EmpVO;
+import com.yedam.app.dept.mapper.DeptMapper;
+import com.yedam.app.dept.service.DeptVO;
+
+
 
 @SpringBootTest
 class Boot01ApplicationTests {
 	@Autowired
-	EmpMapper empMapper;
+	DeptMapper deptMapper;
 	
 	//@Test
 	void contextLoads() {
-		assertNotNull(empMapper);
+		assertNotNull(deptMapper);
+	}
+	
+	//@Test
+	void selectDeptAll() {
+		// 전체조회
+		List<DeptVO> list = deptMapper.selectDeptAll();
+		assertTrue(!list.isEmpty());
+		
 	}
 	
 	@Test
-	void selectEmpAll() {
-		// 전체조회
-		List<EmpVO> list = empMapper.selectEmpAll();
-		assertTrue(!list.isEmpty());
-	}
-	
-	//@Test
-	void selectEmpInfo() {
+	void selectDeptInfo() {
 		// 단건조회
-		EmpVO empVO = new EmpVO();
-		empVO.setEmpid(114);
+		DeptVO deptVO = new DeptVO();
+		deptVO.setLoc("DALLAS");
 		
-		EmpVO findVO = empMapper.selectEmpInfo(empVO);
-		assertEquals(findVO.getEmpname(), "Den");
+		DeptVO findVO = deptMapper.selectDeptInfo(deptVO);
+		assertEquals(findVO.getDeptname(), "RESEARCH");
 	}
 	
-	//@Test
-	void insertEmpInfo() {
+	@Test
+	void insertDeptInfo() {
 		// 등록
-		EmpVO empVO = new EmpVO();
-		empVO.setEmpname("Hong");
-		empVO.setSal(1000);
-		empVO.setDeptid(40);
+		DeptVO deptVO = new DeptVO();
+		deptVO.setDeptname("RESEARCH");
+		deptVO.setLoc("Seoul");
 		
-		int result = empMapper.insertEmpInfo(empVO);
+		int result = deptMapper.insertDeptInfo(deptVO);
 		//assertEquals(result, 1);
-		assertEquals(empVO.getEmpid(), 204);
+		assertEquals(deptVO.getDeptno(), 50);
 	}
 	
 	//@Test
-	void updateEmpInfo() {
+	void updateDeptInfo() {
 		// 1.단건조회 => 2. 업데이트
 		// 1-1) 조건
-		EmpVO empVO = new EmpVO();
-		empVO.setEmpid(2);
+		DeptVO deptVO = new DeptVO();
+		deptVO.setDeptno(2);
 		
 		// 1-2) 조회
-		EmpVO findVO = empMapper.selectEmpInfo(empVO);
-		findVO.setEmpname("Kang");
-		findVO.setMgr(114);
+		DeptVO findVO = deptMapper.selectDeptInfo(deptVO);
+		findVO.setDeptname("SALES");
+		findVO.setLoc("CHICAGO");
 		
 		// 2) 업데이트
-		int result = empMapper.updateEmpInfo(findVO.getEmpid(), findVO);
+		int result = deptMapper.updateDeptInfo(findVO.getDeptno(), findVO);
 		
 		assertEquals(1, result);
 	}
 	
 	//@Test
-	void deleteEmpInfo() {
-		int result = empMapper.deleteEmpInfo(2);
+	void deleteDeptInfo() {
+		int result = deptMapper.deleteDeptInfo(2);
 		assertEquals(1, result);
 	}
 }
