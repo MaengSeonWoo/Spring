@@ -4,13 +4,13 @@
 	<!-- 전체조회 -->
 	<select id="selectEmpAll" resultType="EmpVO">
 		SELECT empid, empname, mgr,
-		sal, deptid, hiredate
+		sal, deptid, hire_date
 		FROM emp
 		ORDER BY empid
 	</select>
 	<!-- 단건조회 -->
 	<select id="selectEmpInfo" resultType="EmpVO">
-		SELECT empid, empname, mgr, sal, deptid, hiredate
+		SELECT empid, empname, mgr, sal, deptid, hire_date
 		FROM emp
 		WHERE empid
 		= #{empid}
@@ -33,11 +33,11 @@
 		<if test="deptid > 0">
 			, deptid
 		</if>
-		, hiredate)
+		, hire_date)
 		VALUES(#{empid},#{empname},#{mgr},#{sal},#{deptid}
 		<choose>
-			<when test="hiredate != null">
-			    , #{hiredate}
+			<when test="hire_date != null">
+			    , #{hire_date}
 			</when>
 			<otherwise>
 				, sysdate

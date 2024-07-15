@@ -23,14 +23,14 @@ class Boot01ApplicationTests2 {
 		assertNotNull(empMapper);
 	}
 	
-	//@Test
+	@Test
 	void selectEmpAll() {
 		// 전체조회
 		List<EmpVO> list = empMapper.selectEmpAll();
 		assertTrue(!list.isEmpty());
 	}
 	
-	@Test
+	//@Test
 	void selectEmpInfo() {
 		// 단건조회
 		EmpVO empVO = new EmpVO();
