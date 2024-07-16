@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layouts/default_layout}"
+	  layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+</head>
+<body>
+	<h3>사원 정보 수정</h3>
+	<form name="updateForm" th:object="${empInfo}">
+		<div>
+			<label>사원번호</label>
+			<input type="number" th:field="*{empid}" readonly>
+		</div>
+		<div>
+			<label>이름</label> 
+			<input type="text" th:field="*{empname}">
+		</div>
+		<div>
+			<label>상사번호</label> 
+			<input type="number" th:field="*{mgr}">
+		</div>
+		<div>
+			<label>급여</label>
+			<input type="number" th:field="*{sal}">
+		</div>
+		<div>
+			<label>부서번호</label> 
+			<input type="number" th:field="*{deptid}">
+		</div>
+		<div>
+			<label>입사일자</label> 
+			<input type="date" th:field="*{hiredate}">
+		</div>
+		<div>
+			<button type="button" id="updateBtn">기모찌저장</button>
+			<button type="button" th:onclick="|location.href='@{/empList}'|">기뭐띠목록</button>
+		</div>
+	</form>
+	<script>
+		/* $('form[name="updateForm"] button').on('click', updateAjax); */
+		$('#updateBtn').on('click', updateAjax);
+		
+		function updateAjax(event){
+			// 1) 유효성 체크
+			if(validationCheck() == false) return;
+			// 2) 서버에 보낼 데이터 정리
+			let dataObj = getEmpObj();
+			console.log(dataObj);
+			// 3) AJAX => ResponseBody
+		    $.ajax('empUpdate', {
+				type : 'post', // 통신할 때 method : get, post, put, delete
+				// => 커맨드객체, @RequestParam
+				//data : dataObj // 기본 객체타입, 자동으로 QueryString 변환
+				// => @RequestBody
+				contentType : 'application/json',
+				data : JSON.stringify(dataObj)
+			})
+			.done(result => {
+				console.log(result)
+			})
+			.fail(err => console.log(err)); 
+		}
+		
+		function validationCheck(){
+			let ename = $('[name="empname"]');
+			if(ename.val() == ''){
+				alert('이름은 필수 값입니다');
+				ename.focus();
+				return false;
+			}
+			
+			let sal = $('[name="sal"]');
+			if(sal.val < 1000 || sal.val() > 99999){
+				alert('급여의 범위는 1,000 ~ 99,999 입니다');
+				sal.focus();
+				return false;
+			}
+			return true;
+		}
+		
+		function getEmpObj(){
+			let formAry = $('form[name="updateForm"]').serializeArray(); //form 태그 내부의 모든 형태를 하나의 배열로 반환
+			// [{name : 'empid', value : '209'},
+			//	{name : 'empname', value : 'Hong'}, ....]
+			// => javascript에선 FormData
+			console.log(formAry);
+			
+			let formObj = {};
+			$.each(formAry, function(idx, input){
+				// input = {name : 'empid', value : '209'}
+				formObj[input.name] = input.value;
+				// formObj['empid'] = '209';
+			});
+			// {empid : 209, empname : 'Hong', ...} - for문을 돌고나면 개별로 있던 값이 합쳐져서 현재 결과로 출력
+			return formObj;
+		}
+		
+	</script>
+</body>
+</html>

@@ -34,10 +34,13 @@
 			, deptid
 		</if>
 		, hire_date)
-		VALUES(#{empid},#{empname},#{mgr},#{sal},#{deptid}
+		VALUES(#{empid},#{empname},#{mgr},#{sal},
+		<if test="deptid > 0">
+		#{deptid}
+		</if>
 		<choose>
-			<when test="hire_date != null">
-			    , #{hire_date}
+			<when test="hiredate != null">
+			    , #{hiredate}
 			</when>
 			<otherwise>
 				, sysdate
