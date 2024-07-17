@@ -29,14 +29,20 @@
 		SELECT NVL(MAX(empid), 0) + 1
 		FROM emp
 	</selectKey>
-		INSERT INTO emp(empid, empname, mgr, sal
+		INSERT INTO emp(empid
+		, empname
+		, mgr
+		, sal
 		<if test="deptid > 0">
 			, deptid
 		</if>
 		, hire_date)
-		VALUES(#{empid},#{empname},#{mgr},#{sal},
+		VALUES(#{empid}
+		,#{empname}
+		,#{mgr}
+		,#{sal}
 		<if test="deptid > 0">
-		#{deptid}
+		, #{deptid}
 		</if>
 		<choose>
 			<when test="hiredate != null">
@@ -52,10 +58,14 @@
 	<!-- 매개변수가 2개 이상 넘어올 경우 parameterType생략 가능 -->
 	<update id="updateEmpInfo">
 		UPDATE emp
-		SET empname = #{emp.empname}
-			,sal = #{emp.sal}
-			,mgr = #{emp.mgr}
-			,deptid = #{emp.deptid}
+		<set>
+			sal = #{emp.sal}
+			, mgr = #{emp.mgr}
+			, deptid = #{emp.deptid}
+			<if test="emp.empname != null and !emp.empname.equals('')">
+			, empname = #{emp.empname}
+			</if>
+		</set> 	
 		WHERE empid = #{id}
 	</update>
 	<!-- 삭제 -->
