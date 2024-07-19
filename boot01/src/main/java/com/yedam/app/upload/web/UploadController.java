@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,17 +19,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.emp.service.EmpVO;
+import com.yedam.app.upload.service.UploadService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
 public class UploadController {
-	@Value("${file.upload.path}") // $ => 변수값을 불러들이는 표현식
+	@Value("${file.upload.path}")
 	private String uploadPath;
-	
-	@GetMapping("formUpload")
-	public void formUploadPage() {}
-	// classpath:/templates/formUpload.html
 	
 	@GetMapping("getPath")
 	@ResponseBody
@@ -36,27 +36,31 @@ public class UploadController {
 		return uploadPath;
 	}
 	
+	@GetMapping("formUpload")
+	public void formUploadPage() {}
+	//classpath:/template/formUpload.html
+	
 	@PostMapping("uploadForm")
 	public String formUploadFile
-			(@RequestPart MultipartFile[] images) { // 매개변수의 변수명은 name 속성과 똑같이 사용
-        // log.info(images[0].getOriginalFilename());
+			(@RequestPart MultipartFile[] images) {
 		for(MultipartFile image : images) {
 			log.warn(image.getContentType()); // 개별 파일의 종류
 			log.warn(image.getOriginalFilename()); // 사용자가 넘겨준 실제 파일이름
 			log.warn(String.valueOf(image.getSize())); // 파일크기
-			// 1) 원래 파일이름
+			
+			//1) 원래 파일이름
 			String fileName = image.getOriginalFilename();
 			
-			// 2) 실제로 저장할 경로를 생성 : 서버의 업로드 경로 + 파일이름
+			//2) 실제로 저장할 경로를 생성 : 서버의 업로드 경로 + 파일이름
 			String saveName = uploadPath + File.separator + fileName;
 			log.debug("saveName : " + saveName);
 			
 			Path savePath = Paths.get(saveName);
 			
-			// 3) 파일 작성(파일 업로드)
+			//3) 파일 작성(파일 업로드)
 			try {
-				image.transferTo(savePath); // 매개변수로 넘어온 path타입을 기반으로 자바 경로 위치의 길을 열어줌
-			}  catch (IOException e) {
+				image.transferTo(savePath);				
+			}catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -68,7 +72,8 @@ public class UploadController {
 	
 	@PostMapping("/uploadsAjax")
 	@ResponseBody
-	public List<String> uploadFile(@RequestPart MultipartFile[] uploadFiles) {
+	public List<String> uploadFile(
+				@RequestPart MultipartFile[] uploadFiles) {
 	    
 		List<String> imageList = new ArrayList<>();
 		
@@ -129,4 +134,25 @@ public class UploadController {
 	private String setImagePath(String uploadFileName) {
 		return uploadFileName.replace(File.separator, "/");
 	}
+	
+	@Autowired
+	UploadService uploadService;
+	
+	@PostMapping("/infoAjax")
+	@ResponseBody
+	public List<String> insertInfo(EmpVO empVO, 
+								   //BoardVO boardVO,
+				@RequestPart MultipartFile[] uploadFiles) {
+	    
+		List<String> imageList = new ArrayList<>();
+		
+	    for(MultipartFile uploadFile : uploadFiles){
+	    	String savePath = uploadService.imageUpload(uploadFile);
+	    	//empVO.setImg(savePath);
+	    	//empService.insetEmpInfo(empVO);
+	    	imageList.add(setImagePath(savePath));
+	    };	
+	    return imageList;
+	}
+	
 }

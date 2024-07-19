@@ -58,9 +58,7 @@ public class BoardController {
 	@PostMapping("boardInsert")
 	public String boardInsertProcess(BoardVO boardVO) {
 		int bno = boardService.insertBoard(boardVO);
-		String url = null;
-		url = "redirect:boardInfo?boardNo=" + bno;
-		return url;
+		return "redirect:boardInfo?boardNo=" + bno;
 	}
 
 	// 수정 - 페이지 : URI - boardUpdate / PARAMETER - BoardVO(QueryString)

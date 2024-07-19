@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
+<html xmlns:th="https://www.thymeleaf.org/"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layouts/default_layout}"
+	  layout:fragment="content">
 <head>
 <meta charset="UTF-8">
+<meta name = "contextPath" 
+	  th:value="${#httpServletRequest.getContextPath()}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>	  
 <title>Insert title here</title>
 </head>
 <body>
@@ -18,8 +24,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<th:block th:each="board : ${boards}"> <!--/* model.addAttribute("boards", list) 이름 똑같이 */-->
-					<tr>
+				<th:block th:each="board, sts : ${boards}"> <!--/* model.addAttribute("boards", list) 이름 똑같이 */-->
+					<!--/* <tr th:name="${sts.index}"> */-->
+					<tr th:name="${sts.index}"
+							   th:onclick="|location.href='@{/boardInfo(boardNo=${board.boardNo})}'|">
 						<td th:text="${board.boardNo}"></td>
 						<td th:text="${board.boardTitle}"></td>
 						<td th:text="${board.boardWriter}"></td>
@@ -28,6 +36,20 @@
 				</th:block>
 			</tbody>
 		</table>
+		<script>
+		/* const context = $('meta[name="contextPath"]').attr('value');
+		 $('tbody > tr').on('click', function(event){
+			if(event.target.tagName == 'BUTTON') return;
+			let bno = $(event.currentTarget).children().first().text();
+			let url = context + '/boardInfo?boardNo=' + bno;
+			alert('url : ' + url)
+			location.href = url;
+		});  */
+	</script>
 	</div>
+<!--/* 	<div>
+		<button type="button" th:onclick="|location.href='@{/boardInsert}'|">등록페이지</button>
+	</div> */-->
 </body>
 </html>
+

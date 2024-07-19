@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layouts/default_layout}"
+	  layout:fragment="content">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div>
+		<h3>게시글 등록</h3>
+		<form th:action="@{/boardInsert}" method="post" name="insertForm">
+			<table>
+			<tr>
+				<th>제목</th>
+				<td><input type="text" name="boardTitle"></td>
+			</tr>
+			<tr>
+				<th>작성자</th>
+				<td><input type="text" name="boardWriter"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td><textarea name="boardContent"></textarea></td>
+			</tr>
+			<tr>
+				<th>첨부이미지</th>
+				<td><input type="text" name="image"></td>
+			</tr>
+			<tr>
+				<th>작성일자</th> 
+				<td><input type="text" name="regdate" placeholder="yyyy/MM/dd"></td>
+			</tr>
+		</table>
+			<button type="submit">등록</button>
+		</form>
+		<script>
+		document.querySelector('form[name="insertForm"]');
+		insertForm.addEventListener('submit', function(event){
+			event.preventDefault(); // 해당 이벤트 일시정지
+			
+			let boardTitle = document.querySelector('input[name="boardTitle"]');
+			if(boardTitle.value == ''){
+				alert('제목은 필수 값입니다')
+				boardTitle.focus();
+				return;
+			}
+			let boardWriter = document.querySelector('input[name="boardWriter"]');
+			if(boardWriter.value == ''){
+				alert('작성자는 필수 값입니다')
+				boardWriter.focus();
+				return;
+			}
+			alert('게시글이 등록되었습니다람쥐')
+			insertForm.submit();
+		});
+		</script>
+	</div>
+</body>
+</html>

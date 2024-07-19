@@ -7,15 +7,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer{
-	@Value("${file.upload.path}") // $ => 변수값을 불러들이는 표현식
+	@Value("${file.upload.path}")
 	private String uploadPath;
-	
-	// 경로 등록
+
+	//경로 등록
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry
-			.addResourceHandler("/images/**") // URL
-			.addResourceLocations("file:///" + uploadPath, ""); // 실제 경로
+			.addResourceHandler("/images/**")    // URL
+			.addResourceLocations("file:///"+uploadPath , ""); //실제 경로
 	}
-	
+
 }

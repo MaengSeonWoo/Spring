@@ -59,10 +59,10 @@
 	<update id = "updateBoardInfo">
 		UPDATE board
 		SET
-			boardTitle = #{boardTitle}
-			,boardContent = #{boardContent}
-			,boardWriter = #{boardWriter}
-			,updatedate = #{updatedate}
+			board_title = #{boardTitle}
+			,board_content = #{boardContent}
+			,board_writer = #{boardWriter}
+			,regdate = #{regdate}
 			,image = #{image}
 		WHERE board_no = #{boardNo}
 	</update>
