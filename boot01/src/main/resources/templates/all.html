@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>손말톡톡</title>
+</head>
+<body>
+	<h1>손말톡톡입니다.</h1>
+	<ul>
+		<li><a th:href="@{/user}">일반 사용자용 페이지로</a></li>
+		<li><a th:href="@{/admin}">관리자 전용 페이지로</a></li>
+	</ul>
+	<div>
+		<h4>로그인 정보</h4>
+		<p sec:authentication="name"></p>
+		<p sec:authentication="principal.username"></p>
+		<p sec:authentication="principal.authorities"></p>
+	</div>
+	<form th:action="@{/logout}" method="post">
+		<button type="submit">로그아웃</button>
+	</form>
+</body>
+</html>
